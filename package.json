@@ -1,0 +1,65 @@
+{
+  "name": "dep-mole",
+  "version": "1.0.0",
+  "description": "A CLI tool to inspect, analyze, and manage dependencies in your Node.js projects.",
+  "author": "Isaac Anasonye",
+  "license": "MIT",
+  "homepage": "https://github.com/Isaacprogi/dep-mole#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Isaacprogi/dep-mole.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Isaacprogi/dep-mole/issues"
+  },
+  "keywords": [
+    "cli",
+    "dependencies",
+    "dependency-analysis",
+    "devtools",
+    "node",
+    "project-maintenance",
+    "package-check"
+  ],
+  "type": "commonjs",
+  "bin": {
+    "dep-mole": "./dist/cli.js",
+    "dm": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "type-check": "tsc --noEmit",
+    "validate": "npm run type-check && npm run build",
+    "test": "jest",
+    "prepublishOnly": "npm run build && node dist/cli.js --help npm pack --dry-run",
+    "release:test": "npm run build && node -e \"const { execSync } = require('child_process'); const name=require('./package.json').name; const version=require('./package.json').version; const file=`${name}-${version}.tgz`; execSync('npm pack', { stdio: 'inherit' }); execSync(`npm install -g ${file}`, { stdio: 'inherit' }); execSync('dm --help', { stdio: 'inherit' }); execSync('npm uninstall -g ${name}-${version}', { stdio: 'inherit' });\""
+  },
+  "devDependencies": {
+    "@types/cli-progress": "^3.11.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.9",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "uuid": "^13.0.0"
+  },
+  "engines": {
+    "node": ">=17"
+  },
+  "dependencies": {
+    "axios": "^1.13.5",
+    "chalk": "^5.6.2",
+    "cli-progress": "^3.12.0",
+    "commander": "^14.0.3",
+    "depcheck": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "node-fetch": "^3.3.2",
+    "ora": "^6.3.1"
+  }
+}
