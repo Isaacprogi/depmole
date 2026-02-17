@@ -7,7 +7,7 @@
   "homepage": "https://github.com/Isaacprogi/dep-mole#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Isaacprogi/dep-mole.git"
+    "url": "git+https://github.com/Isaacprogi/dep-mole.git"
   },
   "bugs": {
     "url": "https://github.com/Isaacprogi/dep-mole/issues"
@@ -23,8 +23,8 @@
   ],
   "type": "commonjs",
   "bin": {
-    "depmole": "./dist/cli.js",
-    "dm": "./dist/cli.js"
+    "depmole": "dist/cli.js",
+    "dm": "dist/cli.js"
   },
   "files": [
     "dist"
