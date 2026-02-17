@@ -25,11 +25,27 @@ depmole is a developer-friendly CLI tool that scans, analyzes, filters, and veri
 
 # 📦 Installation
 
+Install globally:
+
 ```bash
 npm install -g depmole
 ```
 
-Or use with npx:
+After installing globally, you can use either:
+
+```bash
+depmole
+```
+
+or the short alias:
+
+```bash
+dm
+```
+
+---
+
+Or run without installing using **npx**:
 
 ```bash
 npx depmole
@@ -43,6 +59,18 @@ Run inside your project root:
 
 ```bash
 depmole
+```
+
+Short alias:
+
+```bash
+dm
+```
+
+Using npx:
+
+```bash
+npx depmole
 ```
 
 ---
@@ -175,12 +203,12 @@ Missing dependencies (imported but not declared):
 
 depmole follows a structured dependency model:
 
-- 1️⃣ Reads declared dependencies from `package.json`
-- 2️⃣ Checks installation status in `node_modules`
-- 3️⃣ Analyzes real usage via **depcheck**
-- 4️⃣ Applies scoped filters based on CLI flags
-- 5️⃣ Optionally verifies against the npm registry
-- 6️⃣ Generates a structured report
+* 1️⃣ Reads declared dependencies from `package.json`
+* 2️⃣ Checks installation status in `node_modules`
+* 3️⃣ Analyzes real usage via **depcheck**
+* 4️⃣ Applies scoped filters based on CLI flags
+* 5️⃣ Optionally verifies against the npm registry
+* 6️⃣ Generates a structured report
 
 ---
 
@@ -200,19 +228,19 @@ This ensures depmole builds a **full dependency state model**, not just a simple
 # 🧭 Workflow Diagram
 
 ```
-         ┌──────────────────┐
+         ┌──────────────────  ┐
          │  Read package.json │
          └──────────┬─────────┘
                     │
                     ▼
-         ┌──────────────────┐
+         ┌──────────────────   ┐
          │  Check node_modules │
-         └──────────┬─────────┘
+         └──────────┬───────── ┘
                     │
                     ▼
-         ┌──────────────────┐
-         │ Analyze Imports   │
-         │    (depcheck)     │
+         ┌──────────────────  ┐
+         │ Analyze Imports    │
+         │    (depcheck)      │
          └──────────┬─────────┘
                     │
         ┌───────────┼───────────┐
@@ -224,9 +252,9 @@ This ensures depmole builds a **full dependency state model**, not just a simple
               Missing Imports
                     │
                     ▼
-         ┌──────────────────┐
-         │  Scoped Verify    │
-         │  (npm registry)   │
+         ┌──────────────────  ┐
+         │  Scoped Verify     │
+         │  (npm registry)    │
          └──────────┬─────────┘
                     ▼
                Structured Report
@@ -262,3 +290,4 @@ It’s not just a checker — it’s a dependency investigator.
 ## 📄 License
 
 MIT License – see [LICENSE](LICENSE)
+
