@@ -1,5 +1,5 @@
 {
-  "name": "dep-mole",
+  "name": "depmole",
   "version": "1.0.0",
   "description": "A CLI tool to inspect, analyze, and manage dependencies in your Node.js projects.",
   "author": "Isaac Anasonye",
@@ -23,7 +23,7 @@
   ],
   "type": "commonjs",
   "bin": {
-    "dep-mole": "./dist/cli.js",
+    "depmole": "./dist/cli.js",
     "dm": "./dist/cli.js"
   },
   "files": [

@@ -9,12 +9,16 @@ import path from "path";
 const program = new Command();
 
 program
-  .name("dep-mole")
+  .name("depmole")
   .description("Scan, verify, and report your npm dependencies")
   .option("--verify", "Verify dependencies against npm registry")
   .parse(process.argv);
 
 const options = program.opts();
+
+const projectRoot = process.cwd();
+const packageJsonPath = path.join(projectRoot, "package.json");
+const nodeModulesPath = path.join(projectRoot, "node_modules");
 
 // depcheck options
 const checkOptions = {
@@ -25,70 +29,135 @@ const checkOptions = {
 
 (async () => {
   try {
-    const result = await depcheck(process.cwd(), checkOptions);
+    console.log(chalk.blue("\n Running dep-mole...\n"));
 
-    console.log(chalk.blue("\n📦 Dependency Check Report:\n"));
-
-    // Unused dependencies
-    const unusedDeps = result.dependencies || [];
-    if (unusedDeps.length > 0) {
-      console.log(chalk.yellow("🟡 Unused dependencies:"));
-      unusedDeps.forEach((dep) => console.log("  -", dep));
-    } else {
-      console.log(chalk.green("✅ No unused dependencies found."));
+    if (!fs.existsSync(packageJsonPath)) {
+      console.log(chalk.red("❌ No package.json found in this directory."));
+      process.exit(1);
     }
 
-    // Missing dependencies
-    const missingDeps = Object.keys(result.missing);
-    if (missingDeps.length > 0) {
-      console.log(chalk.red("\n🔴 Missing dependencies (imported but not in package.json):"));
-      missingDeps.forEach((dep) => console.log("  -", dep));
-    } else {
-      console.log(chalk.green("\n✅ No missing dependencies found."));
-    }
+    const packageJson = JSON.parse(
+      fs.readFileSync(packageJsonPath, "utf-8")
+    );
 
-    // ---- NEW: Check which dependencies exist in node_modules ----
-    const allDeps = [
-      ...unusedDeps,
-      ...missingDeps,
-      ...(result.devDependencies || []),
+    const declaredDeps = Object.keys(packageJson.dependencies || {});
+    const declaredDevDeps = Object.keys(packageJson.devDependencies || {});
+    const declaredPeerDeps = Object.keys(packageJson.peerDependencies || {});
+
+    const allDeclaredDeps = [
+      ...declaredDeps,
+      ...declaredDevDeps,
+      ...declaredPeerDeps,
     ];
 
-    const nodeModulesPath = path.join(process.cwd(), "node_modules");
 
-    const allDepsStatus = allDeps.map((dep) => ({
+    const result = await depcheck(projectRoot, checkOptions);
+
+    const unusedDeps = result.dependencies || [];
+    const unusedDevDeps = result.devDependencies || [];
+    const missingDeps = Object.keys(result.missing || {});
+
+
+    const dependencyReport = allDeclaredDeps.map((dep) => {
+      const isUnused =
+        unusedDeps.includes(dep) || unusedDevDeps.includes(dep);
+
+      const installedPath = path.join(nodeModulesPath, dep);
+
+      return {
+        name: dep,
+        declared: true,
+        used: !isUnused,
+        installed: fs.existsSync(installedPath),
+      };
+    });
+
+
+    const missingReport = missingDeps.map((dep) => ({
       name: dep,
-      inNodeModules: fs.existsSync(path.join(nodeModulesPath, dep)),
+      declared: false,
+      used: true,
+      installed: false,
     }));
 
-    const installedInNodeModules = allDepsStatus.filter(d => d.inNodeModules);
-    const notInNodeModules = allDepsStatus.filter(d => !d.inNodeModules);
 
-    if (installedInNodeModules.length > 0) {
-      console.log(chalk.blue("\n📂 Dependencies present in node_modules:"));
-      installedInNodeModules.forEach(d => console.log("  -", d.name));
+    console.log(chalk.blue(" Dependency Check Report:\n"));
+
+   
+    const healthy = dependencyReport.filter(
+      (d) => d.used && d.installed
+    );
+
+    if (healthy.length > 0) {
+      console.log(chalk.green(" Healthy dependencies:"));
+      healthy.forEach((d) => console.log("  -", d.name));
     }
 
-    if (notInNodeModules.length > 0) {
-      console.log(chalk.magenta("\n⚠️ Dependencies missing in node_modules:"));
-      notInNodeModules.forEach(d => console.log("  -", d.name));
+    
+    const unused = dependencyReport.filter((d) => !d.used);
+
+    if (unused.length > 0) {
+      console.log(chalk.yellow("\n Unused dependencies:"));
+      unused.forEach((d) => console.log("  -", d.name));
     }
 
-    // Verification on npm
+    
+    const notInstalled = dependencyReport.filter((d) => !d.installed);
+
+    if (notInstalled.length > 0) {
+      console.log(chalk.magenta("\n Declared but missing in node_modules:"));
+      notInstalled.forEach((d) => console.log("  -", d.name));
+    }
+
+    
+    if (missingReport.length > 0) {
+      console.log(
+        chalk.red(
+          "\n Missing dependencies (imported but not in package.json):"
+        )
+      );
+      missingReport.forEach((d) => console.log("  -", d.name));
+    }
+
+    if (
+      healthy.length === 0 &&
+      unused.length === 0 &&
+      notInstalled.length === 0 &&
+      missingReport.length === 0
+    ) {
+      console.log(chalk.green(" All dependencies look good!"));
+    }
+
+ 
     if (options.verify) {
-      console.log(chalk.blue("\n🔍 Verifying dependencies on npm...\n"));
+      console.log(chalk.blue("\n Verifying dependencies on npm...\n"));
 
-      for (const dep of allDeps) {
+      const verifyList = [
+        ...dependencyReport.map((d) => d.name),
+        ...missingReport.map((d) => d.name),
+      ];
+
+      for (const dep of verifyList) {
         try {
-          const res = await axios.get(`https://registry.npmjs.org/${dep}`);
-          const latest = res.data["dist-tags"].latest;
-          console.log(chalk.green(`✅ ${dep} exists on npm. Latest version: ${latest}`));
+          const res = await axios.get(
+            `https://registry.npmjs.org/${encodeURIComponent(dep)}`
+          );
+          const latest = res.data["dist-tags"]?.latest;
+
+          console.log(
+            chalk.green(
+              `✅ ${dep} exists on npm. Latest version: ${latest || "unknown"}`
+            )
+          );
         } catch {
           console.log(chalk.red(`❌ ${dep} not found on npm!`));
         }
       }
     }
+
+    console.log(chalk.blue("\n dep-mole scan complete.\n"));
   } catch (err) {
     console.error(chalk.red("Error running dep-mole:"), err);
+    process.exit(1);
   }
 })();
