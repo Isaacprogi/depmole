@@ -84,11 +84,11 @@ depmole --verify
 
 depmole follows a structured dependency model:
 
-1️⃣ Reads all declared dependencies from `package.json`
-2️⃣ Checks installation status in `node_modules`
-3️⃣ Analyzes actual usage using **depcheck**
-4️⃣ Optionally verifies existence against the npm registry
-5️⃣ Generates a structured report
+- 1️⃣ Reads all declared dependencies from `package.json`
+- 2️⃣ Checks installation status in `node_modules`
+- 3️⃣ Analyzes actual usage using **depcheck**
+- 4️⃣ Optionally verifies existence against the npm registry
+- 5️⃣ Generates a structured report
 
 Each system has a responsibility:
 
@@ -106,19 +106,19 @@ This ensures depmole doesn’t just detect anomalies — it builds a full depend
 # 🖼️ Workflow Diagram
 
 ```
-         ┌──────────────────┐
+         ┌──────────────────  ┐
          │  Read package.json │
          └──────────┬─────────┘
                     │
                     ▼
-         ┌──────────────────┐
-         │  Check node_modules │
+         ┌──────────────────  ┐
+         │  Check node_modules│
          └──────────┬─────────┘
                     │
                     ▼
-         ┌──────────────────┐
-         │  Analyze Imports │
-         │   (depcheck)     │
+         ┌──────────────────  ┐
+         │  Analyze Imports   │
+         │   (depcheck)       │
          └──────────┬─────────┘
                     │
         ┌───────────┼───────────┐
@@ -127,17 +127,15 @@ This ensures depmole doesn’t just detect anomalies — it builds a full depend
  Dependencies   Dependencies Dependencies
                                    │
                                    ▼
-                          ┌──────────────────┐
+                          ┌──────────────────   ┐
                           │ Verify npm Registry │
-                          └──────────┬─────────┘
+                          └──────────┬───────── ┘
                                      ▼
                               ┌─────────────┐
                               │   Report    │
                               │   Results   │
                               └─────────────┘
 ```
-
-You can later replace this with an animated GIF for GitHub.
 
 ---
 
