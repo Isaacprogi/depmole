@@ -6,6 +6,8 @@ depmole is a developer-friendly CLI tool that scans, analyzes, and verifies your
 
 ---
 
+![Depmole Screenshot](https://raw.githubusercontent.com/isaacprogi/scaffoldrite/main/public/depmole.png)
+
 ##  Features
 
 *  Detect **unused dependencies** (declared but not used)
