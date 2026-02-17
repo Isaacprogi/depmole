@@ -175,12 +175,12 @@ Missing dependencies (imported but not declared):
 
 depmole follows a structured dependency model:
 
-1️⃣ Reads declared dependencies from `package.json`
-2️⃣ Checks installation status in `node_modules`
-3️⃣ Analyzes real usage via **depcheck**
-4️⃣ Applies scoped filters based on CLI flags
-5️⃣ Optionally verifies against the npm registry
-6️⃣ Generates a structured report
+- 1️⃣ Reads declared dependencies from `package.json`
+- 2️⃣ Checks installation status in `node_modules`
+- 3️⃣ Analyzes real usage via **depcheck**
+- 4️⃣ Applies scoped filters based on CLI flags
+- 5️⃣ Optionally verifies against the npm registry
+- 6️⃣ Generates a structured report
 
 ---
 
