@@ -6,18 +6,18 @@ depmole is a developer-friendly CLI tool that scans, analyzes, and verifies your
 
 ---
 
-## ⚡ Features
+##  Features
 
-* ✅ Detect **unused dependencies** (declared but not used)
-* 🔴 Detect **missing dependencies** (imported but not declared)
-* 🟣 Detect **declared but not installed** packages
-* 🌍 Verify dependencies against the npm registry
-* 📦 Reads directly from `package.json` (source of truth)
-* 🔎 Uses intelligent analysis powered by **depcheck**
+*  Detect **unused dependencies** (declared but not used)
+*  Detect **missing dependencies** (imported but not declared)
+*  Detect **declared but not installed** packages
+*  Verify dependencies against the npm registry
+*  Reads directly from `package.json` (source of truth)
+*  Uses intelligent analysis powered by **depcheck**
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ```bash
 npm install -g depmole
@@ -31,7 +31,7 @@ npx depmole
 
 ---
 
-## 🛠️ Usage
+##  Usage
 
 Run depmole inside your project root:
 
@@ -41,7 +41,7 @@ depmole
 
 ---
 
-## ⚙️ Options
+##  Options
 
 | Flag       | Description                                                               |
 | ---------- | ------------------------------------------------------------------------- |
@@ -49,7 +49,7 @@ depmole
 
 ---
 
-## 📌 Example
+##  Example
 
 ```bash
 depmole --verify
@@ -58,37 +58,37 @@ depmole --verify
 ### Example Output
 
 ```
-📦 Dependency Check Report:
+ Dependency Check Report:
 
-🟢 Healthy dependencies:
+ Healthy dependencies:
   - react
   - express
 
-🟡 Unused dependencies:
+ Unused dependencies:
   - lodash
 
-🟣 Declared but missing in node_modules:
+ Declared but missing in node_modules:
   - chalk
 
-🔴 Missing dependencies (imported but not declared):
+ Missing dependencies (imported but not declared):
   - axios
 
-🌍 Verifying dependencies on npm...
-✅ lodash exists on npm. Latest version: 4.17.21
-❌ some-unknown-package not found on npm!
+ Verifying dependencies on npm...
+ lodash exists on npm. Latest version: 4.17.21
+ some-unknown-package not found on npm!
 ```
 
 ---
 
-# 🔧 How It Works
+#  How It Works
 
 depmole follows a structured dependency model:
 
-- 1️⃣ Reads all declared dependencies from `package.json`
-- 2️⃣ Checks installation status in `node_modules`
-- 3️⃣ Analyzes actual usage using **depcheck**
-- 4️⃣ Optionally verifies existence against the npm registry
-- 5️⃣ Generates a structured report
+- 1️ Reads all declared dependencies from `package.json`
+- 2️ Checks installation status in `node_modules`
+- 3️ Analyzes actual usage using **depcheck**
+- 4️ Optionally verifies existence against the npm registry
+- 5️ Generates a structured report
 
 Each system has a responsibility:
 
@@ -103,7 +103,7 @@ This ensures depmole doesn’t just detect anomalies — it builds a full depend
 
 ---
 
-# 🖼️ Workflow Diagram
+#  Workflow Diagram
 
 ```
          ┌──────────────────  ┐
@@ -139,7 +139,7 @@ This ensures depmole doesn’t just detect anomalies — it builds a full depend
 
 ---
 
-# 💡 Use Cases
+# Use Cases
 
 * Clean up bloated `package.json` files
 * Catch missing dependencies before deployment
@@ -149,7 +149,7 @@ This ensures depmole doesn’t just detect anomalies — it builds a full depend
 
 ---
 
-# 🧠 Why depmole?
+# Why depmole?
 
 Unlike simple dependency checkers, depmole:
 
@@ -162,6 +162,6 @@ It’s not just a checker — it’s a dependency investigator.
 
 ---
 
-## 📄 License
+##  License
 
 MIT License – see [LICENSE](LICENSE)
